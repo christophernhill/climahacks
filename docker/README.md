@@ -23,3 +23,8 @@ A host browser can connect to the Jupyter lab session at the URL
 http://localhost:PPPP/?token=TTTTT
 ```
 where PPPP is the port on the host and TTTT is the Jupyter lab generated token.
+
+To find forwarded port on host use
+```
+docker ps --format "{{.Image}}: {{.Ports}}" | grep clima | awk '{print $2}' | sed s/'[^:]*\:\([0-9]*\)-.*/\1/'
+```
