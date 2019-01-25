@@ -13,7 +13,12 @@ To build image
 docker build -t clima -f CLIMA.dockerfile .
 ```
 
-To run image
+To launch image on OSX and start Jupyter in Safari in one go
+```
+./run.sh
+```
+
+To run image and start other pieces by hand
 ```
 docker run -P -it --rm clima
 ```
