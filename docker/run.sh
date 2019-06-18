@@ -1,7 +1,8 @@
 #!/bin/bash -xev
 
 cnam="clima-"`cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 32 `
-docker run -P -d -it --name ${cnam} --rm clima
+docker run -d -v `pwd`:/home/juser/host -P -i -t --name ${cnam} --rm clima /bin/bash -c 'cd /home/juser; export PATH="`pwd`/miniconda3/bin:$PATH"; source activate myconda; jupyter-lab --ip `hostname -I` --allow-root'
+# docker run -P -d -it --name ${cnam} --rm clima
 sleep 2
 
 # echo $cnam
