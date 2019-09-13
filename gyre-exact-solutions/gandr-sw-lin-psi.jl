@@ -69,3 +69,23 @@ end
 
 p1 = contour(x, y, ψval')
 plot(p1)
+
+
+ETMP01=:( C₀*β*L/π*cos(π*y/L) +fofy*ψ )
+ETMP02=:( C₁/λ₁*exp(λ₁*x)+C₂/λ₂*exp(λ₂*x) )
+display( latexify(ETMP01) )
+display( latexify(ETMP02) )
+ϕ_s_def=:( ϕ_s = $ETMP01 + γ*π/L*cos(π*y/L)*$ETMP02 )
+display( latexify(ϕ_s_def) )
+
+ϕ_s_func(x,y,fofy)=(((C₀ * β * L) / π) * cos((π * y) / L) + fofy * ψval[x,y]) + ((γ * π) / L) * cos((π * y) / L) * ((C₁ / λ₁) * exp(λ₁ * x) + (C₂ / λ₂) * exp(λ₂ * x))
+
+ϕ_s_val=zeros(nx+1,ny+1)
+for j=1:ny+1
+ for i=1:nx+1
+  ϕ_s_val[i,j]=ϕ_s_func( i,j,f₀+β*y[j] )
+ end
+end
+
+p1 = contour(x, y, ϕ_s_val')
+plot(p1)
