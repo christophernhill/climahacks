@@ -1,4 +1,4 @@
-R#
+#
 # Python script that reads CLiMA VTU files and makes XY plots for
 # ShallowWater CLiMA model setup.
 #
