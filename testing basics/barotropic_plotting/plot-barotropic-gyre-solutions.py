@@ -12,6 +12,21 @@
 #
 
 #
+#
+# Some dependencies!!!
+# - sudo apt update
+# - sudo apt install libgl1-mesa-glx libxext6 libxtst6 libxt6
+# - sudo apt install ffmpeg
+#
+# wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+# ./Miniconda3-latest-Linux-x86_64.sh -b -p miniconda3
+# source ../../myconda/miniconda3/bin/activate
+# conda create -n py37 python=3.7
+# conda activate py37
+# conda install matplotlib numpy pandas vtk 
+#
+
+#
 #  Import needed packages
 #
 import vtk
