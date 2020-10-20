@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+rid=$$
+RNAME=myrun_${rid}
+mkdir myrun_${rid}
+cd    myrun_${rid}
+wget  https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.2-linux-x86_64.tar.gz
+tar   -xzvf julia-1.5.2-linux-x86_64.tar.gz
+git   clone https://github.com/clima/climatemachine.jl
+cd    climatemachine.jl
+git   checkout fcc207617fbcbb88d0437f3d90357b70bfe0fe03
+
+cat > pfile.gz.b64 <<EOF
+H4sICPlVjl8AA3BmaWxlLmdpdACtV+9u2zYQ/66nuDkbINWSbVlKvLbIkCZFl6Cd1zTFlqLrXP2h
+bMYSpVJ0au/TOuwJ9gp9g+7LgKEvsALNO+xJdiQlW06TIG1HwIx4vN/xePfjkYlpkoDjjKmAoFvy
+qPt9RAKm+4c8D1OSld0jmhUp2c3nlaRzkkL4MdoGZTGZA/EGfpiQTsf1/c0oTMDt9bZ833Ac5+NW
+N9rt9kd6sLMDjjfYtN0+tNVfD1B0QgSUgpMgg5ROCbxER+W4LA1w4Pni+S1YOFGe85iyQBCgDMSE
+QJjPDWi1WgbsUJZSRmCKXRYIGo003Cxu3drPs3xMGMlnJfpiw8KGs1cWbBsOYNs5+oFEIufw1Cw6
+Z7//+9sf0FXzNyDKS3OBf89+RVHRefDPX5YNTu+Z0ZbAjU+HkjkVpmXAFX4bUg8+9F7LF7bh4A4a
+Hji1B3ptXPcGLM6vfSWkr939EIZublzacA4qF9FDlTjQW4ANI26yWpBSVDQ5mgRpmr/8EVPJu98u
+OLnL6Snhms/X0quYHAaDXhjHnU5E4vAmubnO5OtZ0hy+nq5kr6/J69fcjXJWCtCR3IY+cXwMyWmQ
+ziRNo3QWk1LP2jC2IcD4nL0yKlSiQS6CatH7N1rgukvJ31qyZTiV4K0S+EZ7A9Yk3o1No70m6aME
+atyDd6+VcGkIc7wuEDQjBD3cloFEKvR97LZ6qqt19vVsr15JW/XRSLtpdWslaFjd7Cm73nJOWvOk
+tWonEY7LF1yYYx6cmkXAg2xUEiHP1L46MTRBfuVZRnQ2Bp49gPbAxx6HyYxFguYMEDIrRlkek9S8
+99iuITbI0xZwu85Iovr3b/D3J/7e2nI7ttyCrdarmxSsRvuN7zrx2qCuKbLt7qFQEWp3zzzICjzC
+ggdYBs17nJCjlBamhQfsgJWzFA8+G8uhLg9Xw4f5ZWAFVEFSoXH7KjZu37e/XguO5PqIz5iZFTTC
+uNgg8gJjc4fzYPF4URAbhjbEwgYZOhVEW4GqgByia5RRMcIZrFd4Tsx4LJXNnlWrkEt1KjZITR2t
+tORT1H5w9Og+XkhDSsZYChm7S8kk3Z2V0UQhD2+jR6gm3RI9/OhZVR3e+FwLS7g3fHTf8/bJjJWX
+IkBvkIlRwskLlCUp3kvmAUMdF7pdPBvI1ZryXcRadT68TZUPb3COrJ+TD+1NFKIjZhRG5Qj9XkYW
+z4pUg2+gX8dqb7i/Jl7yOJ+JgpOEzuUdURacMpGYLbyQ0CkesOlXPT8e0ahlw3cPDzp76OZIimuf
+rcZhUelmQYaFT4YnEDgisRKYpwEvKz5UG8HHwZjlJd59JlKapAI3bB5aTYPBbH5tc3dmc5rSgC/O
+W1Mp0OXCHWz+jyloNpaLCR7HlRBJsBrUaep0OjYOTsXU0omSWo0EKZCGlXl6Sr4wD23F0tuNWlp9
+oSG8rsIgmsrwRGHNtr7r2zeh3Xe3qnsqJaI2SjjPuVT/hXC8+eWWUsLGYmJGJMV1AjYm1lKGry4E
+KFm12wSfDybFkBBLPsUIm2WEyxw04KtSNiTH20PSHD85Nz7e9nvr83jdLKMWchpNlVEZvVWFlU2J
+TVV5blf+otKQQBtcVfULebDfvbbsT8HJJ9DKr6twxxcseC3gkwtWXIIa5JJ0RIVdGYvHeZGn+Xhh
+rnOvpq5Of19WmXbf83Txb2R/mcETzOC5BDZyvW4cH6pJDi08Igz5LSP1Jf7ka2aIX/juE5PWeohV
+5TTl66ALkYUd6mP3c389MBeoHV+kt1Fr4utiqfmk0rzA1VUN+4lp6FdJy9bluNn0WXiKbD55hv8T
+wPn2GZXhPy7VyE3VDQAA
+EOF
+
+base64 -d pfile.gz.b64 | gzip -d > pfile
+git apply pfile
+
+export JULIA_DEPOT_PATH=../.julia
+../julia-1.5.2/bin/julia --project=@. -e 'using Pkg;Pkg.instantiate();using ClimateMachine'
+../julia-1.5.2/bin/julia --project=@. test/Ocean/ShallowWater/GyreDriver.jl 0 0 1
+
+cat > plot_fields.gz.b64 <<EOF
+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
+DajhJ6D+C2j/0IT6GwAA
+EOF
+base64 -d plot_fields.gz.b64 | gzip -d > plot_fields.py
+
+### Linux Ubuntu
+### apt update
+### apt install libgl1-mesa-glx libxext6 libxtst6 libxt6
+### apt install ffmpeg
+#
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+chmod +x Miniconda3-latest-Linux-x86_64.sh
+./Miniconda3-latest-Linux-x86_64.sh -b -p miniconda3
+### wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+### chmod +x Miniconda3-latest-MacOSX-x86_64.sh
+### ./Miniconda3-latest-MacOSX-x86_64.sh -b -p miniconda3
+source ./miniconda3/bin/activate
+conda create -n py37 python=3.7
+conda activate py37
+conda install matplotlib numpy pandas vtk 
+
+cd vtk_new_dt_munk_nonlinear
+python ../plot_fields.py
